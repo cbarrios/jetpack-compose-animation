@@ -166,7 +166,7 @@ fun Home() {
     val lazyListState = rememberLazyListState()
 
     // The background color. The value is changed by the current tab.
-    // TODO 1: Animate this color change. (DONE)
+    // (DONE) TODO 1: Animate this color change.
     val backgroundColor by animateColorAsState(
         targetValue = if (tabPage == TabPage.Home) Purple100 else Green300,
         animationSpec = tween(durationMillis = 1000)
@@ -282,8 +282,8 @@ private fun HomeFloatingActionButton(
                 contentDescription = null
             )
             // Toggle the visibility of the content with animation.
-            // TODO 2-1: Animate this visibility change.
-            if (extended) {
+            // (DONE) TODO 2-1: Animate this visibility change.
+            AnimatedVisibility(extended) {
                 Text(
                     text = stringResource(R.string.edit),
                     modifier = Modifier
@@ -300,10 +300,17 @@ private fun HomeFloatingActionButton(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun EditMessage(shown: Boolean) {
-    // TODO 2-2: The message should slide down from the top on appearance and slide up on
-    //           disappearance.
+    // (DONE) TODO 2-2: The message should slide down from the top on appearance and slide up on disappearance.
     AnimatedVisibility(
-        visible = shown
+        visible = shown,
+        enter = slideInVertically(
+            initialOffsetY = { -it },
+            animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
+        ),
+        exit = slideOutVertically(
+            targetOffsetY = { -it },
+            animationSpec = tween(durationMillis = 250, easing = FastOutLinearInEasing)
+        )
     ) {
         Surface(
             modifier = Modifier.fillMaxWidth(),
